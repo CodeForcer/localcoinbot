@@ -44,7 +44,7 @@ def welcome(bot, update):
     for new_user_obj in update.message.new_chat_members:
         chat_id = update.message.chat.id
         new_user = ""
-        WELCOME_MESSAGE = '<b>Welcome {{username}}!</b>\nYou can start trading at the <a href="https://localcoinswap.com/">LocalCoinSwap Exchange</a>.\nFor any other questions or just to chat, this group is the place to be.'
+        WELCOME_MESSAGE = '<b>Welcome {{username}}!</b>\nYou can start trading 21+ cryptocurrencies, with 250+ payment methods, at <a href="https://localcoinswap.com/">LocalCoinSwap.Com</a>. Signup is instant with no KYC.\nFor any other questions, or just to chat with the community, this group is the place to be.\nPS: Read the pinned post to avoid scammers!'
         try:
             new_user = new_user_obj['username']
         except Exception as e:
