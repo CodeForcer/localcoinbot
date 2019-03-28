@@ -74,8 +74,8 @@ def is_admin(update, context):
 def punish(update, context):
     if is_admin(update, context) == True:
         username = context.message.reply_to_message.from_user.username
-        banned_until = datetime.datetime.now()+datetime.timedelta(seconds=60)
-        message = '{} has been a very naughty meat-sack. I\'m going to put them in timeout for 60 seconds'.format(username)
+        banned_until = datetime.datetime.now()+datetime.timedelta(hours=24)
+        message = '{} has been a very naughty meat-sack. I\'m going to put them in timeout for 24 hours'.format(username)
         update.restrictChatMember(chat_id=context.message.chat.id, user_id=context.message.reply_to_message.from_user.id, until_date=banned_until)
         context.message.reply_text(message)
 
