@@ -1,4 +1,4 @@
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import requests
 
@@ -21,7 +21,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 def start(update, context):
-    # print(update, context) # DEBUG
+    print(update, context) # DEBUG
     context.message.reply_text('Hi! My name is LocalCoinBot. How can I be of assistance?')
 
 def admins(update, context):
@@ -40,6 +40,17 @@ def price(update, context):
         output = 'I was unable to grab the latest price data'
     context.message.reply_text(output) 
 
+def welcome(bot, update):
+    for new_user_obj in update.message.new_chat_members:
+        chat_id = update.message.chat.id
+        new_user = ""
+        WELCOME_MESSAGE = '<b>Welcome {{username}}!</b>\nYou can start trading at the <a href="https://localcoinswap.com/">LocalCoinSwap Exchange</a>.\nFor any other questions or just to chat, this group is the place to be.'
+        try:
+            new_user = new_user_obj['username']
+        except Exception as e:
+            new_user = new_user_obj['first_name']
+        bot.sendMessage(chat_id=chat_id, text=WELCOME_MESSAGE.replace("{{username}}",str(new_user)), parse_mode='HTML')
+
 def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
@@ -54,6 +65,8 @@ def main():
     dispatcher.add_handler(CommandHandler('admin', admins))
     # Grab prices with /price command
     dispatcher.add_handler(CommandHandler('price', price))
+    # Handle welcome
+    dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome))
     # Error handler
     dispatcher.add_error_handler(error)
     # Start the bot and run until a kill signal arrives
