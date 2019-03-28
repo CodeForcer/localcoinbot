@@ -51,6 +51,11 @@ def welcome(bot, update):
             new_user = new_user_obj['first_name']
         bot.sendMessage(chat_id=chat_id, text=WELCOME_MESSAGE.replace("{{username}}",str(new_user)), parse_mode='HTML')
 
+def communities(update, context):
+    reply = '<b>--- LocalCoinSwap.Com Official Communities ---</b>\n<a href="https://localcoinswap.com/">LocalCoinSwap Exchange</a>\n<a href="https://t.me/localcoinswap">LocalCoinSwap English Telegram</a>'
+    chat_id = context.message.chat.id
+    update.sendMessage(chat_id=chat_id, text=reply, parse_mode='HTML')
+
 def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
@@ -67,6 +72,8 @@ def main():
     dispatcher.add_handler(CommandHandler('price', price))
     # Handle welcome
     dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome))
+    # Handle communities post
+    dispatcher.add_handler(CommandHandler('communities', communities))
     # Error handler
     dispatcher.add_error_handler(error)
     # Start the bot and run until a kill signal arrives
