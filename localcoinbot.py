@@ -1,6 +1,7 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import requests
+import datetime
 
 from settings import TOKEN, API_KEY
 
@@ -70,6 +71,26 @@ def is_admin(update, context):
     else:
         return False
 
+def punish(update, context):
+    if is_admin(update, context) == True:
+        username = context.message.reply_to_message.from_user.username
+        banned_until = datetime.datetime.now()+datetime.timedelta(seconds=60)
+        message = '{} has been a very naughty meat-sack. I\'m going to put them in timeout for 60 seconds'.format(username)
+        update.restrictChatMember(chat_id=context.message.chat.id, user_id=context.message.reply_to_message.from_user.id, until_date=banned_until)
+        context.message.reply_text(message)
+
+def forgive(update, context):
+    if is_admin(update, context) == True:
+        username = context.message.reply_to_message.from_user.username
+        message = '{} your sins have been forgiven. Thanks to the mercy of the LocalCoinSwap team your posting rights are unrestricted'.format(username)
+        update.restrictChatMember(chat_id=context.message.chat.id, user_id=context.message.reply_to_message.from_user.id,can_send_messages=True,can_send_media_messages=True,can_send_other_messages=True,can_add_web_page_previews=True)
+        context.message.reply_text(message)
+
+def get_user_id(update, context):
+    username = context.message.reply_to_message.from_user.username
+    user_id = context.message.reply_to_message.from_user.id
+    context.message.reply_text('The person you replied to was {} and their user id is {}'.format(username, user_id))
+
 def main():
     # Start the bot
     updater = Updater(token=TOKEN)
@@ -103,6 +124,11 @@ def main():
     mute_handler = MessageHandler(Filters.text, delete_all_messages)
     dispatcher.add_handler(CommandHandler('mute', mute))
     dispatcher.add_handler(CommandHandler('unmute', unmute))
+    # Find out the user ID of a poster we replied to
+    dispatcher.add_handler(CommandHandler('user_id', get_user_id))
+    # Restrict a user from posting for 60 seconds
+    dispatcher.add_handler(CommandHandler('punish', punish))
+    dispatcher.add_handler(CommandHandler('forgive', forgive))
     # Start the bot and run until a kill signal arrives
     updater.start_polling()
     updater.idle()
