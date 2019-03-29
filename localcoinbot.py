@@ -74,7 +74,7 @@ def welcome(bot, update):
 
 def communities(update, context):
     chat_id = context.message.chat.id
-    update.sendMessage(chat_id=chat_id, text=msg_communities, parse_mode='HTML')
+    update.sendMessage(chat_id=chat_id, text=msg_communities, parse_mode='HTML', disable_web_page_preview=True)
 
 def delete_all_messages(update, context):
     update.deleteMessage(chat_id=context.message.chat.id, message_id=context.message.message_id)

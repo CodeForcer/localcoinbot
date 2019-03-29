@@ -5,15 +5,15 @@ msg_start = emojize(
     use_aliases=True)
 
 msg_admins = emojize(
-    'The following users are the ONLY admins in this group. Do not trust anyone else:\n',
+    'The following users are the <b>ONLY</b> admins in this group. Many scammers will attempt to impersonate admins, so always verify by clicking on one of the following profile links. Do <b>NOT</b> trust anyone else or you will be scammed:\n',
     use_aliases=True)
 
 msg_price = emojize(
-    'The current price of LCS in USD value is: {}\n\nIn the last 24 hours the price has changed: {}',
+    '<b>:moneybag::moneybag: LocalCoinSwap Token Price :moneybag::moneybag:</b>\n\n:fire: The current price of LCS in USD value is: {} :fire:\n\n:fire: In the last 24 hours the price has changed: {} :fire:',
     use_aliases=True)
 
 msg_price_error = emojize(
-    'I was unable to grab the latest price data',
+    'I was unable to grab the latest price data. Might be a good idea to <a href="https://support.localcoinswap.com/">Contact Support</a>',
     use_aliases=True)
 
 msg_welcome = emojize(
@@ -21,7 +21,7 @@ msg_welcome = emojize(
     use_aliases=True)
     
 msg_communities = emojize(
-    '<b>--- LocalCoinSwap.Com Official Communities ---</b>\n<a href="https://localcoinswap.com/">LocalCoinSwap Exchange</a>\n<a href="https://t.me/localcoinswap">LocalCoinSwap English Telegram</a>',
+    '<b>:clap::clap: LocalCoinSwap.Com Official Communities :clap::clap:</b>\n\n:zap: <a href="https://localcoinswap.com/">LocalCoinSwap Exchange</a>\n:zap: <a href="https://t.me/localcoinswap">LocalCoinSwap English Telegram</a>\n:zap: <a href="https://t.me/localcoinswap_rus">LocalCoinSwap Russian Telegram</a>\n:zap: <a href="https://t.me/localcoinswap_esp">LocalCoinSwap Spanish Telegram</a>\n:zap: <a href="https://t.me/localcoinswap_ar">LocalCoinSwap Arabic Telegram</a>\n:zap: <a href="https://twitter.com/Localcoinswap_">LocalCoinSwap Official Twitter</a>\n:zap: <a href="https://www.facebook.com/localcoinswap/">LocalCoinSwap Facebook Page</a>\n:zap: <a href="https://www.reddit.com/user/Localcoinswap/">LocalCoinSwap Subreddit</a>',
     use_aliases=True)
     
 msg_not_private = emojize(
