@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from emoji import emojize
 import logging
 import requests
 import datetime
@@ -73,6 +74,13 @@ def is_admin(update, context):
     else:
         return False
 
+def is_private_chat(update, context):
+    if context.message.chat.type != 'private':
+        context.message.reply_text(emojize('I\'m feeling a little shy, and this isn\'t a good place to chat :sweat: Message me privately so we can get better acquainted', use_aliases=True))
+        return False
+    else:
+        return True
+
 def punish(update, context):
     if is_admin(update, context) == True:
         username = context.message.reply_to_message.from_user.username
@@ -92,6 +100,9 @@ def get_user_id(update, context):
     username = context.message.reply_to_message.from_user.username
     user_id = context.message.reply_to_message.from_user.id
     context.message.reply_text('The person you replied to was {} and their user id is {}'.format(username, user_id))
+
+def promo_five(update, context, args):
+    pass
 
 def main():
     # Start the bot
@@ -131,6 +142,10 @@ def main():
     # Restrict a user from posting for 60 seconds
     dispatcher.add_handler(CommandHandler('punish', punish))
     dispatcher.add_handler(CommandHandler('forgive', forgive))
+    # Promo code functionality
+    dispatcher.add_handler(CommandHandler('promo5', promo_five, pass_args=True))
+    # Is private chat?
+    dispatcher.add_handler(CommandHandler('chat', is_private_chat))
     # Start the bot and run until a kill signal arrives
     updater.start_polling()
     updater.idle()

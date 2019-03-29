@@ -10,3 +10,11 @@ Setup:
 4. Create variables in `settings.py`:  
   TOKEN = 'token', where 'token' is the bot authentication token  
   API_KEY = 'key', where 'key' is the CoinMarketCap authentication token
+
+Testing locally:
+1. Open virtualenv and then start the bot:  
+  ```source venv/bin/activate```  
+  ```python3 localcoinbot.py```
+
+Remote deployment:
+The included systemd service file has been tested for remote deployment.
