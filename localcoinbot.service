@@ -2,7 +2,7 @@
 Description=LocalCoinBot Daemon
 
 [Service]
-Type=simple
+Environment="PATH=/home/ubuntu/localcoinbot/venv/bin"
 ExecStart=/usr/bin/python3 /home/ubuntu/localcoinbot/localcoinbot.py
 WorkingDirectory=/home/ubuntu/localcoinbot
 Restart=always
