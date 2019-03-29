@@ -10,6 +10,8 @@ Setup:
 4. Create variables in `settings.py`:  
   TOKEN = 'token', where 'token' is the bot authentication token  
   API_KEY = 'key', where 'key' is the CoinMarketCap authentication token
+5. Create CSV file for promo data:  
+  ```touch PROMO5.CSV```
 
 Testing locally:
 1. Open virtualenv and then start the bot:  

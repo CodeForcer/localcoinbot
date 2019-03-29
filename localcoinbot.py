@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, RegexHandler
 from emoji import emojize
 import logging
 import requests
 import datetime
+import csv
 
 from settings import TOKEN, API_KEY
 
+PROMO_FIVE_FILE = 'PROMO5.CSV'
+EMAIL, TWITTER, CONTRACT = range(3)
 CMC_CLIENT_CONFIG = {
     'host': 'https://pro-api.coinmarketcap.com/',
     'version': 'v1/',
@@ -26,13 +29,10 @@ logger = logging.getLogger(__name__)
 
 def start(update, context):
     print(update, context) # DEBUG
-    context.message.reply_text('Hi! My name is LocalCoinBot. How can I be of assistance?')
+    context.message.reply_text(emojize('Hi! My name is LocalCoinBot. I\'m already started :smiley:', use_aliases=True))
 
 def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
-
-def get_admin_ids(bot, chat_id):
-    return [admin.user.id for admin in bot.get_chat_administrators(chat_id)]
 
 def admins(update, context):
     admins = update.getChatAdministrators(chat_id=context.effective_chat.id)
@@ -69,6 +69,8 @@ def delete_all_messages(update, context):
     update.deleteMessage(chat_id=context.message.chat.id, message_id=context.message.message_id)
 
 def is_admin(update, context):
+    def get_admin_ids(bot, chat_id):
+        return [admin.user.id for admin in bot.get_chat_administrators(chat_id)]
     if context.message.from_user.id in get_admin_ids(update, context.message.chat_id):
         return True
     else:
@@ -101,8 +103,58 @@ def get_user_id(update, context):
     user_id = context.message.reply_to_message.from_user.id
     context.message.reply_text('The person you replied to was {} and their user id is {}'.format(username, user_id))
 
-def promo_five(update, context, args):
-    pass
+#### PROMO FUNCTIONS ####
+
+def facts_to_str(user_data):
+    facts = list()
+    for key, value in user_data.items():
+        facts.append('{}: {}'.format(key, value))
+    return "\n".join(facts).join(['\n', '\n'])
+
+def append_to_csv(telegram_username, email, twitter, trade, file=PROMO_FIVE_FILE):
+    fields=[telegram_username,email,twitter,trade]
+    with open(file, 'a') as f:
+        writer = csv.writer(f)
+        writer.writerow(fields)
+
+def promo_five(update, context):
+    if not is_private_chat(update, context):
+        return False
+    else:
+        context.message.reply_text('Thank you for taking part in our promotion, please answer a couple of short questions to register your details')
+        context.message.reply_text('What is your email address which you used on the LocalCoinSwap exchange?')
+        return EMAIL
+
+def one_email(update, context, user_data):
+    text = context.message.text
+    user_data['email'] = text
+    context.message.reply_text(
+        'Your email address is {}? Great, lets continue!'.format(text.lower()))
+    context.message.reply_text('What is your Twitter address you are Tweeting about LocalCoinSwap from?')
+    return TWITTER
+
+def two_twitter(update, context, user_data):  
+    text = context.message.text
+    user_data['twitter'] = text
+    context.message.reply_text(
+        'Your Twitter address is {}? Great, lets continue!'.format(text.lower()))
+    context.message.reply_text('What is your url for the completed trade you wish to claim a prize for?')
+    return CONTRACT
+
+def three_contract(update, context, user_data):
+    text = context.message.text
+    user_data['trade'] = text
+    context.message.reply_text(
+        'Your trade url is {}? Great!'.format(text.lower()))
+    context.message.reply_text("The following details have been entered into our promotion:"
+                              "{}"
+                              "It normally takes 5-7 days for prizes to be allocated. Thanks for your participation!".format(facts_to_str(user_data)))
+    user = context.message.from_user.username
+    append_to_csv(telegram_username=user, email=user_data['email'], twitter=user_data['twitter'], trade=user_data['trade'])
+    user_data.clear()
+    return ConversationHandler.END
+
+###########################
 
 def main():
     # Start the bot
@@ -143,7 +195,16 @@ def main():
     dispatcher.add_handler(CommandHandler('punish', punish))
     dispatcher.add_handler(CommandHandler('forgive', forgive))
     # Promo code functionality
-    dispatcher.add_handler(CommandHandler('promo5', promo_five, pass_args=True))
+    promo_handler = ConversationHandler(
+        entry_points=[CommandHandler('promo5', promo_five)],
+        states={
+            EMAIL: [MessageHandler(Filters.text, one_email, pass_user_data=True),],
+            TWITTER: [MessageHandler(Filters.text, two_twitter, pass_user_data=True),],
+            CONTRACT: [MessageHandler(Filters.text, three_contract, pass_user_data=True),],
+        },
+        fallbacks=[None]
+    )
+    dispatcher.add_handler(promo_handler)
     # Is private chat?
     dispatcher.add_handler(CommandHandler('chat', is_private_chat))
     # Start the bot and run until a kill signal arrives
