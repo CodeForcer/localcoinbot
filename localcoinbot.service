@@ -1,0 +1,12 @@
+[Unit]
+Description=LocalCoinBot Daemon
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ubuntu/localcoinbot/localcoinbot.py
+WorkingDirectory=/home/ubuntu/localcoinbot
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

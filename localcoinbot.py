@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import requests
