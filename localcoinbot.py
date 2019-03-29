@@ -15,6 +15,7 @@ from messages import (
     msg_welcome,
     msg_communities,
     msg_not_private,
+    msg_not_supergroup,
     msg_punished,
     msg_forgiven,
     msg_promo_intro,
@@ -52,14 +53,15 @@ def admins(update, context):
     context.message.reply_text(reply, parse_mode=ParseMode.HTML)
 
 def price(update, context):
-    response = requests.get(URL, params=PARAMS, headers=HEADERS)
-    if response.status_code == 200:
-        price = response.json()['data']['LCS']['quote']['USD']['price']
-        change = '{}%'.format(response.json()['data']['LCS']['quote']['USD']['percent_change_24h'])
-        output = msg_price.format(price, change)
-    else:
-        output = msg_price_error
-    context.message.reply_text(output, parse_mode=ParseMode.HTML) 
+    if is_public_chat(update, context):
+        response = requests.get(URL, params=PARAMS, headers=HEADERS)
+        if response.status_code == 200:
+            price = response.json()['data']['LCS']['quote']['USD']['price']
+            change = '{}%'.format(response.json()['data']['LCS']['quote']['USD']['percent_change_24h'])
+            output = msg_price.format(price, change)
+        else:
+            output = msg_price_error
+        context.message.reply_text(output, parse_mode=ParseMode.HTML) 
 
 def welcome(bot, update):
     for new_user_obj in update.message.new_chat_members:
@@ -88,6 +90,13 @@ def is_admin(update, context):
 def is_private_chat(update, context):
     if context.message.chat.type != 'private':
         context.message.reply_text(msg_not_private, parse_mode=ParseMode.HTML)
+        return False
+    else:
+        return True
+
+def is_public_chat(update, context):
+    if context.message.chat.type != 'supergroup':
+        context.message.reply_text(msg_not_supergroup, parse_mode=ParseMode.HTML)
         return False
     else:
         return True

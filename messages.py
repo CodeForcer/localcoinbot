@@ -27,6 +27,10 @@ msg_communities = emojize(
 msg_not_private = emojize(
     'I\'m feeling a little shy, and this isn\'t a good place to chat :sweat: Message me privately so we can get better acquainted',
     use_aliases=True)
+
+msg_not_supergroup = emojize(
+    'I\'d prefer to do this kind of thing in public, just to make sure you aren\'t pushing my circuits too hard :sweat:',
+    use_aliases=True)
     
 msg_punished = emojize(
     '{} has been a very naughty meat-sack. I\'m going to put them in timeout for 24 hours',
