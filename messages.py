@@ -1,7 +1,7 @@
 from emoji import emojize
 
 msg_start = emojize(
-    'Hi! My name is LocalCoinBot. I\'m already started :smiley:',
+    'Hi! My name is <b>LocalCoinBot</b>. I\'m already started :smiley:',
     use_aliases=True)
 
 msg_admins = emojize(
@@ -36,7 +36,7 @@ msg_forgiven = emojize(
     '{} your sins have been forgiven. Thanks to the mercy of the LocalCoinSwap team your posting rights are unrestricted',
     use_aliases=True)
     
-msg_promo_into = emojize(
+msg_promo_intro = emojize(
     'Thank you for taking part in our promotion, please answer a couple of short questions to register your details',
     use_aliases=True)
     
