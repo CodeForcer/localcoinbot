@@ -116,6 +116,9 @@ def forgive(update, context):
         update.restrictChatMember(chat_id=context.message.chat.id, user_id=context.message.reply_to_message.from_user.id,can_send_messages=True,can_send_media_messages=True,can_send_other_messages=True,can_add_web_page_previews=True)
         context.message.reply_text(message, parse_mode=ParseMode.HTML)
 
+def play_welcome(update, context):
+    context.message.reply_text(msg_welcome, parse_mode=ParseMode.HTML)
+
 #### PROMO FUNCTIONS ####
 
 def facts_to_str(user_data):
@@ -177,6 +180,7 @@ def main():
     dispatcher.add_handler(CommandHandler('price', price))
     # Handle welcome
     dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome))
+    dispatcher.add_handler(CommandHandler('greet', play_welcome)) # DEBUG
     # Handle communities post
     dispatcher.add_handler(CommandHandler('communities', communities))
     # Error handler

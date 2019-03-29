@@ -17,7 +17,7 @@ msg_price_error = emojize(
     use_aliases=True)
 
 msg_welcome = emojize(
-    '<b>Welcome {{username}}!</b>\nYou can start trading 21+ cryptocurrencies, with 250+ payment methods, at <a href="https://localcoinswap.com/">LocalCoinSwap.Com</a>. Signup is instant with no KYC.\nFor any other questions, or just to chat with the community, this group is the place to be.\nPS: Read the pinned post to avoid scammers!',
+    '<b>Welcome {{username}} :clap::clap:</b>\n\n:star2:Start trading 21+ cryptocurrencies, with 250+ payment methods, at <a href="https://localcoinswap.com/">LocalCoinSwap</a>\n:star2:Signup is instant with no KYC\n:star2:For any other questions, or just to chat with the community, this group is the place to be\n\nPS: Read the pinned post to avoid scammers!',
     use_aliases=True)
     
 msg_communities = emojize(
@@ -33,11 +33,11 @@ msg_not_supergroup = emojize(
     use_aliases=True)
     
 msg_punished = emojize(
-    '{} has been a very naughty meat-sack. I\'m going to put them in timeout for 24 hours',
+    '{} has been a very naughty meat-sack. I\'m going to put them in timeout for 24 hours :thumbsdown:',
     use_aliases=True)
     
 msg_forgiven = emojize(
-    '{} your sins have been forgiven. Thanks to the mercy of the LocalCoinSwap team your posting rights are unrestricted',
+    '{} your sins have been forgiven. Thanks to the mercy of the LocalCoinSwap team your posting rights are unrestricted :facepunch:',
     use_aliases=True)
     
 msg_promo_intro = emojize(
