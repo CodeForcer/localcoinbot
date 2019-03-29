@@ -1,9 +1,12 @@
 [Unit]
 Description=LocalCoinBot Daemon
+After=network.target
 
 [Service]
+User=ubuntu
+Group=ubuntu
 Environment="PATH=/home/ubuntu/localcoinbot/venv/bin"
-ExecStart=/usr/bin/python3 /home/ubuntu/localcoinbot/localcoinbot.py
+ExecStart=/home/ubuntu/localcoinbot/localcoinbot.py
 WorkingDirectory=/home/ubuntu/localcoinbot
 Restart=always
 RestartSec=5
