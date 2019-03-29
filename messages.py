@@ -1,7 +1,7 @@
 from emoji import emojize
 
 msg_start = emojize(
-    'Hi! My name is <b>LocalCoinBot</b>. I\'m already started :smiley:',
+    'Hi! My name is <b>LocalCoinBot</b>. I\'m the newest member of the LocalCoinSwap team!\n\nI\'m here to help moderate the chat group and handle promotional competitions. I\'m not always perfect just because I\'m a robot, so if I do something weird then don\'t be afraid to let my bosses know :smiley:\n\nThere\'s a bunch of cool things I can already do:\n/start   Show this message\n/admins   Show the admins of this group\n/price   Get the latest token price information for LCS\n/communities   List the official LocalCoinSwap communities\n',
     use_aliases=True)
 
 msg_admins = emojize(
@@ -9,7 +9,7 @@ msg_admins = emojize(
     use_aliases=True)
 
 msg_price = emojize(
-    '<b>:moneybag::moneybag: LocalCoinSwap Token Price :moneybag::moneybag:</b>\n\n:fire: The current price of LCS in USD value is: {} :fire:\n\n:fire: In the last 24 hours the price has changed: {} :fire:',
+    '<b>:fire::fire: LocalCoinSwap Token Price :fire::fire:</b>\n\n:dollar: The current price of LCS in USD value is: {}\n\n:dollar: In the last 24 hours the price has changed: {}',
     use_aliases=True)
 
 msg_price_error = emojize(
