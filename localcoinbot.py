@@ -67,7 +67,7 @@ def welcome(bot, update):
     for new_user_obj in update.message.new_chat_members:
         new_user = ""
         try:
-            new_user = new_user_obj['username']
+            new_user = new_user_obj['name']
         except Exception as e:
             new_user = new_user_obj['first_name']
         bot.sendMessage(chat_id=update.message.chat.id, text=msg_welcome.replace("{{username}}",str(new_user)), parse_mode='HTML')
