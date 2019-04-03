@@ -4,6 +4,10 @@ msg_start = emojize(
     'Hi! My name is <b>LocalCoinBot</b>. I\'m the newest member of the LocalCoinSwap team!\n\nI\'m here to help moderate the chat group and handle promotional competitions. I\'m not always perfect just because I\'m a robot, so if I do something weird then don\'t be afraid to let my bosses know :smiley:\n\nThere\'s a bunch of cool things I can already do:\n/start   Show this message\n/admins   Show the admins of this group\n/price   Get the latest token price information for LCS\n/communities   List the official LocalCoinSwap communities\n',
     use_aliases=True)
 
+msg_start_priv = emojize(
+    'Hi! My name is <b>LocalCoinBot</b>. I\'m here to help you with with LocalCoinSwap promotional competitions, and provide useful information such as token prices or lists of administrators.\n\nI\'m not always perfect just because I\'m a robot, so if I do something weird then don\'t be afraid to let my bosses know :smiley:\n\nSome commands you can try are:\n/start   Show this message\n/promo5   Enter our latest promotional competition\n/admins   Show the admins of a group\n/price   Get the latest token price information for LCS (only available in public chats)\n/communities   List the official LocalCoinSwap communities\n',
+    use_aliases=True)
+
 msg_admins = emojize(
     'The following users are the <b>ONLY</b> admins in this group. Many scammers will attempt to impersonate admins, so always verify by clicking on one of the following profile links. Do <b>NOT</b> trust anyone else or you will be scammed:\n',
     use_aliases=True)
@@ -25,7 +29,7 @@ msg_communities = emojize(
     use_aliases=True)
     
 msg_not_private = emojize(
-    'I\'m feeling a little shy, and this isn\'t a good place to chat :sweat: Message me privately so we can get better acquainted',
+    'Congratulations on your completed trade. To register for the promotion and receive your BTC, <a href="https://t.me/LocalCoinSwapsBot">message me privately</a>',
     use_aliases=True)
 
 msg_not_supergroup = emojize(

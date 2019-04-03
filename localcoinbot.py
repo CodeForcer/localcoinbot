@@ -9,6 +9,7 @@ import csv
 from settings import TOKEN
 from messages import (
     msg_start,
+    msg_start_priv,
     msg_admins,
     msg_price,
     msg_price_error,
@@ -40,8 +41,11 @@ from config import (
 )
 
 def start(update, context):
-    print(update, context) # DEBUG
-    context.message.reply_text(msg_start, parse_mode=ParseMode.HTML)
+    if is_public_chat(update, context):
+        print(update, context) # DEBUG
+        context.message.reply_text(msg_start, parse_mode=ParseMode.HTML)
+    else:
+        context.message.reply_text(msg_start_priv, parse_mode=ParseMode.HTML)
 
 def error(update, context):
     LOGGER.warning('Update "%s" caused error "%s"', update, context.error)
@@ -49,6 +53,9 @@ def error(update, context):
 def admins(update, context):
     admins = update.getChatAdministrators(chat_id=context.effective_chat.id)
     admin_names = [ '@'+i.user.username for i in admins ]
+    for i in admin_names:
+        if ('bot' in i) or ('Bot' in i):
+            admin_names.remove(i)
     reply = msg_admins+'\n'.join(admin_names)
     context.message.reply_text(reply, parse_mode=ParseMode.HTML)
 
@@ -61,7 +68,9 @@ def price(update, context):
             output = msg_price.format(price, change)
         else:
             output = msg_price_error
-        context.message.reply_text(output, parse_mode=ParseMode.HTML) 
+        context.message.reply_text(output, parse_mode=ParseMode.HTML)
+    else:
+        context.message.reply_text(msg_not_supergroup, parse_mode=ParseMode.HTML)
 
 def welcome(bot, update):
     for new_user_obj in update.message.new_chat_members:
@@ -96,7 +105,6 @@ def is_private_chat(update, context):
 
 def is_public_chat(update, context):
     if context.message.chat.type != 'supergroup':
-        context.message.reply_text(msg_not_supergroup, parse_mode=ParseMode.HTML)
         return False
     else:
         return True
