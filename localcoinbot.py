@@ -214,7 +214,7 @@ def main():
     dispatcher.add_handler(CommandHandler('forgive', forgive))
     # Promo code functionality
     promo_handler = ConversationHandler(
-        entry_points=[CommandHandler('promo5', promo_five)],
+        entry_points=[CommandHandler('launchpromo', promo_five)],
         states={
             EMAIL: [MessageHandler(Filters.text, one_email, pass_user_data=True),],
             TWITTER: [MessageHandler(Filters.text, two_twitter, pass_user_data=True),],
