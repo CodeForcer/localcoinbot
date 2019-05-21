@@ -13,7 +13,7 @@ msg_admins = emojize(
     use_aliases=True)
 
 msg_price = emojize(
-    '<b>:fire::fire: LocalCoinSwap Token Price :fire::fire:</b>\n\n:dollar: The current price of LCS in USD value is: {}\n\n:dollar: In the last 24 hours the price has changed: {}',
+    '<b>:fire::fire: LocalCoinSwap Token Price :fire::fire:</b>\n\n:dollar: The current price of LCS in USD value is: {}\n\n:dollar: To purchase LCS, visit <a href="https://localcoinswap.com/">LocalCoinSwap</a>',
     use_aliases=True)
 
 msg_price_error = emojize(

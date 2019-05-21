@@ -65,7 +65,7 @@ def price(update, context):
         if response.status_code == 200:
             price = response.json()['data']['LCS']['quote']['USD']['price']
             change = '{}%'.format(response.json()['data']['LCS']['quote']['USD']['percent_change_24h'])
-            output = msg_price.format(price, change)
+            output = msg_price.format(price)
         else:
             output = msg_price_error
         context.message.reply_text(output, parse_mode=ParseMode.HTML)
