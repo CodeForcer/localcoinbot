@@ -185,7 +185,7 @@ def main():
     dispatcher.add_handler(CommandHandler('admins', admins))
     dispatcher.add_handler(CommandHandler('admin', admins))
     # Grab prices with /price command
-    dispatcher.add_handler(CommandHandler('price', price))
+    #dispatcher.add_handler(CommandHandler('price', price))
     # Handle welcome
     dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome))
     dispatcher.add_handler(CommandHandler('greet', play_welcome)) # DEBUG
