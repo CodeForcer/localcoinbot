@@ -14,3 +14,4 @@ PARAMS = {
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
+DJANGO_URL = 'http://127.0.0.1:8000/en/register-chat-id/'

@@ -79,3 +79,15 @@ msg_promo_complete = emojize(
 msg_only_admins = emojize(
     'Sorry meat-sack, only admins can do this',
     use_aliases=True)
+
+msg_subscribe = emojize(
+    'Hey {}. You have just subscribed to receive Telegram notifications. Your unique chat ID is {}. Don\'t foget to check that I\'m not muted!',
+    use_aliases=True)
+
+msg_default_start = emojize(
+    'Hi {}! I can use this private conversation to send you notifcations about new trades and messages, so you don\'t miss out. To activate this feature, visit your preferences page on the LocalCoinSwap exchange',
+    use_aliases=True)
+
+msg_subscribe_error = emojize(
+    'There was some kind of error registering you with the exchange to receive notifications. Did you follow the correct link? Please raise a support ticket if this issue persists',
+    use_aliases=True)
