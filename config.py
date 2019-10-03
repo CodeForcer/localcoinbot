@@ -1,5 +1,5 @@
 import logging
-from settings import API_KEY
+from settings import API_KEY, EXCHANGE_URL
 
 PROMO_FIVE_FILE = 'PROMO5.CSV'
 EMAIL, TWITTER, CONTRACT = range(3)

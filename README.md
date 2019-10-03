@@ -20,3 +20,7 @@ Testing locally:
 
 Remote deployment:
 The included systemd service file has been tested for remote deployment.
+
+## Example URL:
+
+https://telegram.me/LocalCoinSwapsBot?start=uEDbtJFHxKc
