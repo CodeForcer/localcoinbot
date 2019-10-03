@@ -28,6 +28,10 @@ from messages import (
     msg_promo_trade_given,
     msg_promo_complete,
     msg_only_admins,
+    msg_subscribe,
+    msg_subscribe_error,
+    msg_default_start,
+    msg_subscribe_error,
 )
 from config import (
     PROMO_FIVE_FILE,
@@ -38,14 +42,52 @@ from config import (
     HEADERS,
     PARAMS,
     LOGGER,
+    EXCHANGE_URL,
 )
 
 def start(update, context):
     if is_public_chat(update, context):
-        print(update, context) # DEBUG
+        # print(update, context) # DEBUG
         context.message.reply_text(msg_start, parse_mode=ParseMode.HTML)
     else:
-        context.message.reply_text(msg_start_priv, parse_mode=ParseMode.HTML)
+        username = context['message'].from_user.first_name
+        chat_id = context['message'].chat.id
+        try:
+            user_uuid = context['message'].text.split('/start ')[1]
+            params = {
+                'user_uuid': user_uuid,
+                'chat_id': chat_id
+            }
+            x = requests.post(EXCHANGE_URL, data = params)
+            if x.status_code == 200:
+                message = msg_subscribe.format(username, chat_id)
+                context.message.reply_text(message, parse_mode=ParseMode.HTML)
+            else:
+                message = msg_subscribe_error
+                context.message.reply_text(message, parse_mode=ParseMode.HTML)
+        except Exception as e:
+            message = msg_default_start.format(username)
+            context.message.reply_text(message, parse_mode=ParseMode.HTML)
+
+def subscribe(update, context):
+    try:
+        username = context['message'].from_user.first_name
+        chat_id = context['message'].chat.id
+        user_uuid = context['message'].text.split('/subscribe ')[1]
+        params = {
+            'user_uuid': user_uuid,
+            'chat_id': chat_id
+        }
+        x = requests.post(EXCHANGE_URL, data = params)
+        if x.status_code == 200:
+            message = msg_subscribe.format(username, chat_id)
+            context.message.reply_text(message, parse_mode=ParseMode.HTML)
+        else:
+            message = msg_subscribe_error
+            context.message.reply_text(message, parse_mode=ParseMode.HTML)
+    except Exception as e:
+        message = msg_default_start.format(username)
+        context.message.reply_text(message, parse_mode=ParseMode.HTML)
 
 def error(update, context):
     LOGGER.warning('Update "%s" caused error "%s"', update, context.error)
@@ -184,6 +226,8 @@ def main():
     # Handle /admin command
     dispatcher.add_handler(CommandHandler('admins', admins))
     dispatcher.add_handler(CommandHandler('admin', admins))
+    # Handle SMS subscribe command
+    # dispatcher.add_handler(CommandHandler('subscribe', subscribe))
     # Grab prices with /price command
     #dispatcher.add_handler(CommandHandler('price', price))
     # Handle welcome
