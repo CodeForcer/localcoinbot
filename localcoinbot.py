@@ -53,9 +53,9 @@ def start(update, context):
         username = context['message'].from_user.first_name
         chat_id = context['message'].chat.id
         try:
-            user_uuid = context['message'].text.split('/start ')[1]
+            telegram_unique_token = context['message'].text.split('/start ')[1]
             params = {
-                'user_uuid': user_uuid,
+                'telegram_unique_token': telegram_unique_token,
                 'chat_id': chat_id
             }
             x = requests.post(EXCHANGE_URL, data = params)
@@ -73,9 +73,9 @@ def subscribe(update, context):
     try:
         username = context['message'].from_user.first_name
         chat_id = context['message'].chat.id
-        user_uuid = context['message'].text.split('/subscribe ')[1]
+        telegram_unique_token = context['message'].text.split('/subscribe ')[1]
         params = {
-            'user_uuid': user_uuid,
+            'telegram_unique_token': telegram_unique_token,
             'chat_id': chat_id
         }
         x = requests.post(EXCHANGE_URL, data = params)
