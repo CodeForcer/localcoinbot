@@ -1,4 +1,5 @@
-Simple LocalCoinSwap group Telgram bot
+Simple LocalCoinSwap group Telgram bot which moderates:  
+https://t.me/localcoinswap (group ID -1001332456112)
 
 Setup:
 1. Create virtual env and open it:  
@@ -8,10 +9,7 @@ Setup:
   ```pip3 install -r requirements.txt```
 3. Create `settings.py` file in base directory
 4. Create variables in `settings.py`:  
-  TOKEN = 'token', where 'token' is the bot authentication token  
-  API_KEY = 'key', where 'key' is the CoinMarketCap authentication token
-5. Create CSV file for promo data:  
-  ```touch PROMO5.CSV```
+  TOKEN = 'token', where 'token' is the bot authentication token
 
 Testing locally:
 1. Open virtualenv and then start the bot:  
