@@ -1,28 +1,25 @@
 #!/usr/bin/env python3
 
-from telegram.ext import Updater
-from telegram.ext import CommandHandler
-from telegram.ext import MessageHandler
-from telegram.ext import Filters
-from telegram.ext import ConversationHandler
-from telegram.ext import RegexHandler
-from telegram import ParseMode
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, CallbackContext
+from telegram import ParseMode, InlineKeyboardButton, InlineKeyboardMarkup, Update
 import requests
 import datetime
-import csv
+from random import shuffle
 
 import messages
 import config
 from settings import TOKEN
+from settings import GROUP_ID
 
 from config import PARAMS
 from config import LOGGER
 from config import EXCHANGE_URL
-GREET_EVERY = 3  # Greet every third person
+
+GREET_EVERY = 1
 WELCOME_COUNTER = 1
 
 
-def start(update, context):
+def start(update: Update, context: CallbackContext):
     if is_public_chat(update, context):
         context.message.reply_text(
             messages.msg_start, parse_mode=ParseMode.HTML)
@@ -47,7 +44,7 @@ def start(update, context):
             context.message.reply_text(message, parse_mode=ParseMode.HTML)
 
 
-def subscribe(update, context):
+def subscribe(update: Update, context: CallbackContext):
     try:
         username = context['message'].from_user.first_name
         chat_id = context['message'].chat.id
@@ -68,11 +65,11 @@ def subscribe(update, context):
         context.message.reply_text(message, parse_mode=ParseMode.HTML)
 
 
-def error(update, context):
+def error(update: Update, context: CallbackContext):
     LOGGER.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-def admins(update, context):
+def admins(update: Update, context: CallbackContext):
     admins = update.getChatAdministrators(chat_id=context.effective_chat.id)
     admin_names = ['@'+i.user.username for i in admins]
     for i in admin_names:
@@ -82,23 +79,75 @@ def admins(update, context):
     context.message.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-def welcome(bot, update):
-    global WELCOME_COUNTER
-    for new_user_obj in update.message.new_chat_members:
-        new_user = ""
-        try:
-            new_user = new_user_obj['name']
-        except Exception as e:
-            new_user = new_user_obj['first_name']
+def hodor(update: Update, context: CallbackContext):
+    try:
+        for new_member in update.message.new_chat_members:
+            callback_id = str(new_member.id)
+            context.bot.restrict_chat_member(
+                int(GROUP_ID),
+                new_member.id,
+                can_send_messages=False,
+                can_send_media_messages=False,
+                can_send_other_messages=False,
+                can_add_web_page_previews=False
+            )
 
-        if WELCOME_COUNTER == GREET_EVERY:
-            bot.sendMessage(
-                chat_id=update.message.chat.id,
-                text=messages.msg_welcome.replace("{{username}}", str(new_user)),
-                parse_mode='HTML')
-            WELCOME_COUNTER = 1
+            keyboard_items = [
+                InlineKeyboardButton("🟢", callback_data=callback_id + ',circle'),
+                InlineKeyboardButton("🔷", callback_data=callback_id + ',diamond'),
+                InlineKeyboardButton("🟪", callback_data=callback_id + ',square'),
+                ]
+
+            shuffle(keyboard_items)
+            keyboard = []
+
+            counter = 0
+            for i in range(1):  # create a list with nested lists
+                keyboard.append([])
+                for n in range(3):
+                    keyboard_item = keyboard_items[counter]
+                    keyboard[i].append(keyboard_item)  # fills nested lists with data
+                    counter += 1
+
+            reply_markup = InlineKeyboardMarkup(keyboard)
+
+
+            context.bot.sendMessage(
+                int(GROUP_ID),
+                text=messages.msg_welcome.replace("{{username}}", str(new_member.first_name)),
+                parse_mode='HTML',
+                reply_markup=reply_markup,
+                disable_web_page_preview=True)
+
+    except AttributeError:
+        pass
+
+
+def button(update, context):
+    query = update.callback_query
+    person_who_pushed_the_button = int(query.data.split(",")[0])
+    print("Query user: " + str(query.from_user))
+    print("Query data: " + str(query.data))
+
+    if query.from_user.id == person_who_pushed_the_button:
+        if 'circle' in query.data:
+            context.bot.delete_message(
+                chat_id=update.callback_query.message.chat_id,
+                message_id=update.callback_query.message.message_id
+            )
+            context.bot.restrict_chat_member(
+                int(GROUP_ID),
+                person_who_pushed_the_button,
+                can_send_messages=True,
+                can_send_media_messages=True,
+                can_send_other_messages=True,
+                can_add_web_page_previews=True
+            )
         else:
-            WELCOME_COUNTER += 1
+            context.bot.delete_message(
+                    chat_id=update.callback_query.message.chat_id,
+                    message_id=update.callback_query.message.message_id
+                )
 
 
 def communities(update, context):
@@ -169,10 +218,6 @@ def forgive(update, context):
         context.message.reply_text(message, parse_mode=ParseMode.HTML)
 
 
-def play_welcome(update, context):
-    context.message.reply_text(messages.msg_welcome, parse_mode=ParseMode.HTML)
-
-
 def mute(update, context):
     if is_admin(update, context):
         print('User is admin')  # DEBUG
@@ -199,7 +244,7 @@ def debug_group_id(update, context):
 
 def main():
     # Start the bot
-    updater = Updater(token=TOKEN)
+    updater = Updater(str(TOKEN), use_context=True)
     dispatcher = updater.dispatcher
 
     # Error handler & debug
@@ -213,10 +258,8 @@ def main():
     dispatcher.add_handler(CommandHandler('admins', admins))
     dispatcher.add_handler(CommandHandler('admin', admins))
 
-    # Handle welcome
-    dispatcher.add_handler(MessageHandler(
-        Filters.status_update.new_chat_members, welcome))
-    dispatcher.add_handler(CommandHandler('greet', play_welcome))
+    dispatcher.add_handler(MessageHandler(Filters.chat(int(GROUP_ID)), hodor), group=1)
+    dispatcher.add_handler(CallbackQueryHandler(button), group=1)
 
     # Handle communities post
     dispatcher.add_handler(CommandHandler('communities', communities))
