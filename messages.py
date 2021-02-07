@@ -1,19 +1,19 @@
 from emoji import emojize
 
 msg_start = emojize(
-    'Hi! My name is <b>LocalCoinBot</b>. I\'m the newest member of the LocalCoinSwap team!\n\nI\'m here to help moderate the chat group and handle promotional competitions. I\'m not always perfect just because I\'m a robot, so if I do something weird then don\'t be afraid to let my bosses know :smiley:\n\nThere\'s a bunch of cool things I can already do:\n/start   Show this message\n/admins   Show the admins of this group\n/communities   List the official LocalCoinSwap communities\n',
+    'Hi! My name is <b>LocalCoinBot</b>. I\'m the newest member of the LocalCoinSwap team!\n\nI\'m here to help moderate the chat group and handle promotional competitions. I\'m not always perfect just because I\'m a robot, so if I do something weird then don\'t be afraid to let my bosses know :smiley:\n\nThere\'s a bunch of cool things I can already do:\n\n/start\nShow this message\n\n/admins\nShow the admins of this group\n\n/communities\nOfficial LocalCoinSwap communities\n\n/support\nFind Help\n\n/socials\nFind LocalCoinSwap on social media\n\n/contract\nAccess the LCS token smart contract\n\n/gas\nGet rough Ethereum Gas Estimates in Gwei\n\n/exchanges\nList of places to trade LCS tokens',
     use_aliases=True)
 
 msg_admins = emojize(
-    'The following users are the <b>ONLY</b> admins in this group. Many scammers will attempt to impersonate admins, so always verify by clicking on one of the following profile links. Do <b>NOT</b> trust anyone else or you will be scammed:\n',
+    'The following users are the <b>ONLY</b> admins in this group. Many scammers will attempt to impersonate admins, so always verify by clicking on one of the following profile links. Do <b>NOT</b> trust anyone else or you will be scammed:\n\n',
     use_aliases=True)
 
 msg_welcome = emojize(
-    '<b>Welcome {{username}} :clap::clap:</b>\n\n:star2: Trade a Range of Cryptocurrencies\n:star2: Use 250+ Payment Methods\n:star2: Instant Signup with No Delays\n:star2: Trade Your Way at <a href="https://localcoinswap.com/">LocalCoinSwap</a>\n\n💫 If you have questions, need some help, or just want to chat with the community, this group is the place to be. Read the pinned post to avoid scammers!\n\n<b>⚠️ Please select the green circle 🟢 to prove you are human!</b>',
+    '<b>Welcome {{username}} :clap::clap:</b>\n\n:star2: Trade a Range of Cryptocurrencies\n:star2: Use 250+ Payment Methods\n:star2: Instant Signup with No Delays\n:star2: Trade Your Way at <a href="https://localcoinswap.com/">LocalCoinSwap</a>\n\n💫 If you have questions, need some help, or just want to chat with the community, this group is the place to be. Read the pinned post to avoid scammers!\n\n<b>⚠️ Please select the 🟢 to prove you are human!</b>',
     use_aliases=True)
 
 msg_communities = emojize(
-    '<b>:clap::clap: LocalCoinSwap.Com Official Communities :clap::clap:</b>\n\n:zap: <a href="https://localcoinswap.com/">LocalCoinSwap Exchange</a>\n:zap: <a href="https://t.me/localcoinswap">LocalCoinSwap English Telegram</a>\n:zap: <a href="https://t.me/localcoinswap_rus">LocalCoinSwap Russian Telegram</a>\n:zap: <a href="https://t.me/localcoinswap_esp">LocalCoinSwap Spanish Telegram</a>\n:zap: <a href="https://t.me/localcoinswap_ar">LocalCoinSwap Arabic Telegram</a>\n:zap: <a href="https://twitter.com/Localcoinswap_">LocalCoinSwap Official Twitter</a>\n:zap: <a href="https://www.facebook.com/localcoinswap/">LocalCoinSwap Facebook Page</a>\n:zap: <a href="https://www.reddit.com/user/Localcoinswap/">LocalCoinSwap Subreddit</a>',
+    '<b>:clap::clap: LocalCoinSwap Official Communities</b>\n:zap:<a href="https://t.me/localcoinswap">LocalCoinSwap English Telegram</a>\n:zap: <a href="https://t.me/localcoinswap_esp">LocalCoinSwap Spanish Telegram</a>',
     use_aliases=True)
 
 msg_not_private = emojize(
@@ -46,4 +46,24 @@ msg_default_start = emojize(
 
 msg_subscribe_error = emojize(
     'There was some kind of error registering you with the exchange to receive notifications. Did you follow the correct link? Please raise a support ticket if this issue persists',
+    use_aliases=True)
+
+msg_contract = emojize(
+    '📃 <a href="https://etherscan.io/address/0xaa19961b6b858d9f18a115f25aa1d98abc1fdba8">LCS Token Smart Contract</a>',
+    use_aliases=True)
+
+msg_exchanges = emojize(
+    '<b>Places to Trade LCS Tokens</b> 👀\n🔹<a href="https://localcoinswap.com/buy-sell/LCS/">LocalCoinSwap</a>\n🔹<a href="https://www.hotbit.io/exchange?symbol=LCS_BTC">Hotbit</a>\n🔹<a href="https://app.uniswap.org/#/swap?inputCurrency=0xaa19961b6b858d9f18a115f25aa1d98abc1fdba8">Uniswap</a>\n🔹<a href="https://forkdelta.app/#!/trade/0xaa19961b6b858d9f18a115f25aa1d98abc1fdba8-ETH">ForkDelta</a>',
+    use_aliases=True)
+
+msg_help = emojize(
+    '<b>Need Help? 🤷‍♂️</b>\nContact us via our <a href="https://support.localcoinswap.com/hc/en-us">Support Portal</a>',
+    use_aliases=True)
+
+msg_socials = emojize(
+    '<b>LocalCoinSwap on Social Media 💬</b>\n🔸<a href="https://localcoinswap.com/">Facebook</a>\n🔸<a href="https://twitter.com/Localcoinswap_">Twitter 🇬🇧</a>\n🔸<a href="https://twitter.com/LocalCoinSwapES">Twitter 🇪🇸</a>\n🔸<a href="https://www.linkedin.com/company/localcoinswap/">LinkedIn</a>\n🔸<a href="https://www.reddit.com/r/LocalCoinSwap/">Reddit</a>',
+    use_aliases=True)
+
+msg_price = emojize(
+    "<b>Estimated Ethereum Gas Prices</b>\n\n🟢 Fastest: {} Gwei\n🟡 Fast: {} Gwei\n🟠 Standard: {} Gwei\n🔴 Low: {} Gwei\n\nFor the most accurate estimates:\nhttps://ethgasstation.info/",
     use_aliases=True)

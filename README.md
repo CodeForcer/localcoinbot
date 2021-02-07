@@ -10,7 +10,6 @@ Setup:
 3. Create `settings.py` file in base directory
 4. Create variables in `settings.py`:
   TOKEN = 'token', where 'token' is the bot authentication token
-  GROUP_ID = 'group id for where the bot is to be used'
 
 Testing locally:
 1. Open virtualenv and then start the bot:
