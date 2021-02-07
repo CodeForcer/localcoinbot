@@ -4,8 +4,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 from telegram import ParseMode, InlineKeyboardButton, InlineKeyboardMarkup, Update, ChatPermissions
 
 import requests
-import datetime
-from random import shuffle
+from random import shuffle, choice
 
 import time
 import messages
@@ -149,6 +148,8 @@ def hodor(update, context):
             shuffle(keyboard_items)
             keyboard = []
 
+            random_item = choice(keyboard_items)
+
             counter = 0
             for i in range(1):  # create a list with nested lists
                 keyboard.append([])
@@ -158,10 +159,14 @@ def hodor(update, context):
                     counter += 1
 
             reply_markup = InlineKeyboardMarkup(keyboard)
+            hi_there = messages.msg_welcome.format(
+                str(new_member.first_name),
+                random_item["text"]
+                )
 
             welcome_message = context.bot.sendMessage(
                 chat_id=update.message.chat.id,
-                text=messages.msg_welcome.replace("{{username}}", str(new_member.first_name)),
+                text=hi_there,
                 parse_mode='HTML',
                 reply_markup=reply_markup,
                 disable_web_page_preview=True)
@@ -175,9 +180,17 @@ def hodor(update, context):
 def button(update, context):
     query = update.callback_query
     person_who_pushed_the_button = int(query.data.split(",")[0])
+    print(query.message.text)
+
+    if "🟢" in query.message.text:
+        query_item = "circle"
+    elif "🔶" in query.message.text:
+        query_item = "diamond"
+    else:
+        query_item = "square"
 
     if query.from_user.id == person_who_pushed_the_button:
-        if 'circle' in query.data:
+        if query_item in query.data:
             delete_bot_message(update, context)
             context.bot.restrictChatMember(
                 chat_id=query.message.chat.id,
@@ -196,7 +209,6 @@ def communities(update, context):
         text=messages.msg_communities,
         parse_mode='HTML',
         disable_web_page_preview=True)
-
     cleaner(context, community_msg)
 
 
@@ -249,7 +261,6 @@ def contract(update, context):
         text=messages.msg_contract,
         parse_mode='HTML',
         disable_web_page_preview=True)
-
     cleaner(context, contract_msg)
 
 
@@ -259,7 +270,6 @@ def exchanges(update, context):
         text=messages.msg_exchanges,
         parse_mode='HTML',
         disable_web_page_preview=True)
-
     cleaner(context, exchange_msg)
 
 
@@ -269,7 +279,6 @@ def support(update, context):
         text=messages.msg_help,
         parse_mode='HTML',
         disable_web_page_preview=True)
-
     cleaner(context, support_link)
 
 
@@ -279,7 +288,6 @@ def socials(update, context):
         text=messages.msg_socials,
         parse_mode='HTML',
         disable_web_page_preview=True)
-
     cleaner(context, socials_msg)
 
 
@@ -306,7 +314,11 @@ def gas(update, context):
 
         else:
             message = "Sorry Unable to Fetch Gas Estimates Right Now..."
-            gas_msg = context.bot.send_message(message, parse_mode=ParseMode.HTML)
+            gas_msg = context.bot.send_message(
+                chat_id=update.message.chat.id,
+                text=message,
+                parse_mode=ParseMode.HTML
+                )
             cleaner(context, gas_msg)
 
     except Exception as e:
@@ -346,6 +358,7 @@ def main():
 
     # Show Link to Support Portal
     dp.add_handler(CommandHandler('help', support, run_async=True))
+    dp.add_handler(CommandHandler('support', support, run_async=True))
 
     # Show Links to Socials
     dp.add_handler(CommandHandler('socials', socials, run_async=True))

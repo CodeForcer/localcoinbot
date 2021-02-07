@@ -9,7 +9,7 @@ msg_admins = emojize(
     use_aliases=True)
 
 msg_welcome = emojize(
-    '<b>Welcome {{username}} :clap::clap:</b>\n\n:star2: Trade a Range of Cryptocurrencies\n:star2: Use 250+ Payment Methods\n:star2: Instant Signup with No Delays\n:star2: Trade Your Way at <a href="https://localcoinswap.com/">LocalCoinSwap</a>\n\n💫 If you have questions, need some help, or just want to chat with the community, this group is the place to be. Read the pinned post to avoid scammers!\n\n<b>⚠️ Please select the 🟢 to prove you are human!</b>',
+    '<b>Welcome {} :clap::clap:</b>\n\n:star2: Trade a Range of Cryptocurrencies\n:star2: Use 250+ Payment Methods\n:star2: Instant Signup with No Delays\n:star2: Trade Your Way at <a href="https://localcoinswap.com/">LocalCoinSwap</a>\n\n💫 If you have questions, need some help, or just want to chat with the community, this group is the place to be. Read the pinned post to avoid scammers!\n\n<b>⚠️ Please select the {} to prove you are human!</b>',
     use_aliases=True)
 
 msg_communities = emojize(
