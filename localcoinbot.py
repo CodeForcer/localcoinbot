@@ -293,16 +293,15 @@ def socials(update, context):
 
 def gas(update, context):
     try:
-        resp = requests.get("https://etherchain.org/api/gasPriceOracle")
+        resp = requests.get("https://api.etherscan.io/api?module=gastracker&action=gasoracle")
         if resp.status_code == 200:
             prices = resp.json()
 
-            low = prices['safeLow']
-            standard = prices['standard']
-            fast = prices['fast']
-            fastest = prices['fastest']
+            low = prices['result']['SafeGasPrice']
+            standard = prices['result']['ProposeGasPrice']
+            fast = prices['result']['FastGasPrice']
 
-            message = messages.msg_price.format(fastest, fast, standard, low)
+            message = messages.msg_price.format(fast, standard, low)
 
             gas_msg = context.bot.send_message(
                 chat_id=update.message.chat.id,
@@ -312,17 +311,15 @@ def gas(update, context):
                 )
             cleaner(context, gas_msg)
 
-        else:
-            message = "Sorry Unable to Fetch Gas Estimates Right Now..."
-            gas_msg = context.bot.send_message(
-                chat_id=update.message.chat.id,
-                text=message,
-                parse_mode=ParseMode.HTML
-                )
-            cleaner(context, gas_msg)
-
-    except Exception as e:
-        LOGGER.warning(f'Exception Occured: {str(e)}')
+    except TypeError as e:
+        LOGGER.warning(f'Rate Limited - {str(e)}')
+        message = "Sorry Unable to Fetch Gas Estimates Right Now..."
+        gas_msg = context.bot.send_message(
+            chat_id=update.message.chat.id,
+            text=message,
+            parse_mode=ParseMode.HTML
+            )
+        cleaner(context, gas_msg)
 
 
 def main():

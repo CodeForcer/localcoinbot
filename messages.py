@@ -65,5 +65,5 @@ msg_socials = emojize(
     use_aliases=True)
 
 msg_price = emojize(
-    "<b>Estimated Ethereum Gas Prices</b>\n\n🟢 Fastest: {} Gwei\n🟡 Fast: {} Gwei\n🟠 Standard: {} Gwei\n🔴 Low: {} Gwei\n\nFor the most accurate estimates:\nhttps://ethgasstation.info/",
+    "<b>Estimated Ethereum Gas Prices</b>\n\n🟢 Fast: {} Gwei\n🟡 Standard: {} Gwei\n🔴 Low: {} Gwei\n\nFor the most accurate estimates:\nhttps://ethgasstation.info/",
     use_aliases=True)
