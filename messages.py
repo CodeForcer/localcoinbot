@@ -1,7 +1,7 @@
 from emoji import emojize
 
 msg_start = emojize(
-    'Hi! My name is <b>LocalCoinBot</b>. I\'m the newest member of the LocalCoinSwap team!\n\nI\'m here to help moderate the chat group and handle promotional competitions. I\'m not always perfect just because I\'m a robot, so if I do something weird then don\'t be afraid to let my bosses know :smiley:\n\nThere\'s a bunch of cool things I can already do:\n\n/start\nShow this message\n\n/admins\nShow the admins of this group\n\n/communities\nOfficial LocalCoinSwap communities\n\n/support\nFind Help\n\n/socials\nFind LocalCoinSwap on social media\n\n/contract\nAccess the LCS token smart contract\n\n/gas\nGet rough Ethereum Gas Estimates in Gwei\n\n/exchanges\nList of places to trade LCS tokens',
+    'Hi! My name is <b>LocalCoinBot</b>\n\nI\'m here to help moderate the chat group and handle promotional competitions. I\'m not always perfect just because I\'m a robot, so if I do something weird then don\'t be afraid to let my bosses know :smiley:\n\nThere\'s a bunch of cool things I can already do:\n/start - Show this message\n/admins - Show the group admins\n/communities - Official communities\n/support - Find Help or support\n/socials - Find us on social media\n/contract - LCS token smart contract\n/gas - Ethereum Gas Estimates\n/exchanges - Places to trade LCS\n/price - Show crypto market stats e.g. bitcoin usd',
     use_aliases=True)
 
 msg_admins = emojize(
@@ -13,7 +13,7 @@ msg_welcome = emojize(
     use_aliases=True)
 
 msg_communities = emojize(
-    '<b>:clap::clap: LocalCoinSwap Official Communities</b>\n:zap:<a href="https://t.me/localcoinswap">LocalCoinSwap English Telegram</a>\n:zap: <a href="https://t.me/localcoinswap_esp">LocalCoinSwap Spanish Telegram</a>',
+    '<b>LocalCoinSwap Official Communities</b>:clap::clap:\n:zap:<a href="https://t.me/localcoinswap">LocalCoinSwap English Telegram</a>\n:zap: <a href="https://t.me/localcoinswap_esp">LocalCoinSwap Spanish Telegram</a>',
     use_aliases=True)
 
 msg_not_private = emojize(
@@ -64,6 +64,18 @@ msg_socials = emojize(
     '<b>LocalCoinSwap on Social Media 💬</b>\n🔸<a href="https://localcoinswap.com/">Facebook</a>\n🔸<a href="https://twitter.com/Localcoinswap_">Twitter 🇬🇧</a>\n🔸<a href="https://twitter.com/LocalCoinSwapES">Twitter 🇪🇸</a>\n🔸<a href="https://www.linkedin.com/company/localcoinswap/">LinkedIn</a>\n🔸<a href="https://www.reddit.com/r/LocalCoinSwap/">Reddit</a>',
     use_aliases=True)
 
-msg_price = emojize(
-    "<b>Estimated Ethereum Gas Prices</b>\n\n🟢 Fast: {} Gwei\n🟡 Standard: {} Gwei\n🔴 Low: {} Gwei\n\nFor the most accurate estimates:\nhttps://ethgasstation.info/",
+msg_gas = emojize(
+    "<b>Estimated Ethereum Gas Prices</b>\n\n🟢 Fast: <code>{}</code> Gwei\n🟡 Standard: <code>{}</code> Gwei\n🔴 Low: <code>{}</code> Gwei\n\nFor the most accurate estimates:\nhttps://ethgasstation.info/",
+    use_aliases=True)
+
+msg_stats_fail = emojize(
+    "<b>Unable to Fetch Price</b> 🤔\n\nPlease check your request and only use full coin name with fiat ticker all in lowercase, e.g. bitcoin usd. You wont be able to price check everything, but it will work for most things.\n\n",
+    use_aliases=True)
+
+msg_crypto_stats = emojize(
+    "📊 <b>{}/{}</b>\nPrice:\n<code>{} {}</code>\nVolume:\n<code>{}</code>\nMarket Cap:\n<code>{}</code>\nChange:\n<code>{}</code>\n",
+    use_aliases=True)
+
+msg_stats_price = emojize(
+    "📊 <b>{}/{}</b>\n<code>{}</code> {}",
     use_aliases=True)
