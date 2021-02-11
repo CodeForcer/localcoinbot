@@ -79,3 +79,7 @@ msg_crypto_stats = emojize(
 msg_stats_price = emojize(
     "📊 <b>{}/{}</b>\n<code>{}</code> {}",
     use_aliases=True)
+
+msg_translate = emojize(
+    "<b>🌎 Attempting Translation:</b>\n {}",
+    use_aliases=True)

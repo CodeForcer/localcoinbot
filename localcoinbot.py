@@ -3,6 +3,8 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, CallbackContext
 from telegram import ParseMode, InlineKeyboardButton, InlineKeyboardMarkup, Update, ChatPermissions
 from pycoingecko import CoinGeckoAPI
+from googletrans import Translator
+from langid.langid import LanguageIdentifier, model
 from random import shuffle, choice
 import requests
 import time
@@ -24,6 +26,10 @@ PATIENCE = 60
 
 # Coingecko API Wrapper
 cg = CoinGeckoAPI()
+
+# Translation
+translator = Translator()
+identifier = LanguageIdentifier.from_modelstring(model, norm_probs=True)
 
 
 def good_permissions():
@@ -426,6 +432,21 @@ def unknown_command(context, update):
     except BaseException as e:
         LOGGER.info(f'CMD Message Already Deleted - {str(e)}')
 
+def translate(context, update):
+    # Checks if Language is English, if Confident it isn't Translate & Reply
+    msg_text = context.effective_message.text
+    lang, confidence = identifier.classify(msg_text)
+
+    if lang != "en" and confidence >= 0.9:
+        try:
+            translated_msg = translator.translate(msg_text)
+            context.effective_message.reply_text(
+                messages.msg_translate.format(translated_msg.text),
+                parse_mode='HTML')
+            LOGGER.info(f'Non-English Language Detected: {lang}')
+        except:
+            LOGGER.warning('Translation Failed')
+
 def main():
     # Start the bot
     updater = Updater(str(TOKEN))
@@ -474,6 +495,9 @@ def main():
 
     # Delete Unknown Command Messages from Group Members
     dp.add_handler(MessageHandler(Filters.command, unknown_command, run_async=True))
+
+    # Translate Non-English Messages
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, translate))
 
     # Start the bot and run until a kill signal arrives
     updater.start_polling()
