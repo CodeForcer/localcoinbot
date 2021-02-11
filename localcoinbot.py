@@ -497,7 +497,7 @@ def main():
     dp.add_handler(MessageHandler(Filters.command, unknown_command, run_async=True))
 
     # Translate Non-English Messages
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, translate))
+    dp.add_handler(MessageHandler(Filters.text & Filters.chat_type.supergroup & ~Filters.command, translate))
 
     # Start the bot and run until a kill signal arrives
     updater.start_polling()
