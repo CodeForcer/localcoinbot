@@ -3,7 +3,6 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, CallbackContext
 from telegram import ParseMode, InlineKeyboardButton, InlineKeyboardMarkup, Update, ChatPermissions
 from pycoingecko import CoinGeckoAPI
-from googletrans import Translator
 from langid.langid import LanguageIdentifier, model
 from random import shuffle, choice
 import requests
@@ -14,6 +13,8 @@ import messages
 import config
 
 from settings import TOKEN
+from settings import MYMEMORY_KEY
+from settings import MYMEMORY_CONTACT
 from config import PARAMS
 from config import LOGGER
 from config import EXCHANGE_URL
@@ -27,8 +28,7 @@ PATIENCE = 60
 # Coingecko API Wrapper
 cg = CoinGeckoAPI()
 
-# Translation
-translator = Translator()
+# Language Detection
 identifier = LanguageIdentifier.from_modelstring(model, norm_probs=True)
 
 
@@ -413,6 +413,7 @@ def price(update, context):
 
     cleaner(context, price_msg)
 
+
 def remove_command(context, update):
     # Delete Bot Commands from Group Members
     msg = update.effective_message
@@ -421,6 +422,7 @@ def remove_command(context, update):
         LOGGER.info(f'CMD Message Deleted - {msg.message_id}')
     except BaseException as e:
         LOGGER.info(f'CMD Message Already Deleted - {str(e)}')
+
 
 def unknown_command(context, update):
     # Delete Unknown Bot Commands from Group Members
@@ -432,6 +434,7 @@ def unknown_command(context, update):
     except BaseException as e:
         LOGGER.info(f'CMD Message Already Deleted - {str(e)}')
 
+
 def translate(context, update):
     # Checks if Language is English, if Confident it isn't Translate & Reply
     msg_text = context.effective_message.text
@@ -439,13 +442,28 @@ def translate(context, update):
 
     if lang != "en" and confidence >= 0.9:
         try:
-            translated_msg = translator.translate(msg_text)
+            # Create Langpair to Show Translation API What We Need
+            langpair = lang + '|en'
+
+            translated_msg = requests.get(
+                'https://api.mymemory.translated.net/get',
+                params={
+                    'q': msg_text,
+                    'key': MYMEMORY_KEY, # API Key
+                    'langpair': langpair,
+                    'de': MYMEMORY_CONTACT # Contact Email
+                    }).json()
+
+            # Grab Translated Text from Nested JSON Response
+            final_translation = translated_msg['matches'][0]['translation']
+
+            # Respond with Translation to Non-English Message
             context.effective_message.reply_text(
-                messages.msg_translate.format(translated_msg.text),
+                messages.msg_translate.format(final_translation),
                 parse_mode='HTML')
-            LOGGER.info(f'Non-English Language Detected: {lang}')
-        except:
-            LOGGER.warning('Translation Failed')
+        except Exception as e:
+            LOGGER.warning(f'Translation Failed - {str(e)}')
+
 
 def main():
     # Start the bot
