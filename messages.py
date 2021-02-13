@@ -83,3 +83,7 @@ msg_stats_price = emojize(
 msg_translate = emojize(
     "<b>🌎 Attempting Translation:</b>\n{}",
     use_aliases=True)
+
+msg_translate_failed = emojize(
+    "<b>🌎 Translation Failed:\n</b>Please check your request and try again later.\n",
+    use_aliases=True)

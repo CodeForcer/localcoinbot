@@ -465,6 +465,72 @@ def translate(context, update):
             LOGGER.warning(f'Translation Failed - {str(e)}')
 
 
+def translate_request(update, context):
+
+    # Make Sure it's a Public Chat
+    if is_public_chat(update, context) is False:
+        context.bot.send_message(
+            chat_id=update.effective_message.chat.id,
+            text="It's only us here, I won't do that")
+        return
+
+    try:
+        # Check that the User Actually Replied to a Message
+        replied_message = update.message.reply_to_message.text
+
+    except AttributeError:
+                context.bot.send_message(
+                    chat_id=update.effective_message.chat.id,
+                    text="You didn't reply to a message...",)
+                return
+
+    try:
+        lang, confidence = identifier.classify(replied_message)
+
+        if context.args[0] == "en":
+            langpair = lang + '|en'
+        else:
+            langpair = 'en|' + context.args[0]
+
+    except IndexError:
+        # If No Language is Provided Assume Goal is English
+        lang, confidence = identifier.classify(replied_message)
+        if lang == "en":
+            context.bot.send_message(
+                    chat_id=update.effective_message.chat.id,
+                    text="Message already appears to be English, unsure what to do.")
+            return
+        else:
+            langpair = lang + '|en'
+
+    try:
+        translated_msg = requests.get(
+            'https://api.mymemory.translated.net/get',
+            params={
+                'q': replied_message,
+                'key': MYMEMORY_KEY, # API Key
+                'langpair': langpair,
+                'de': MYMEMORY_CONTACT # Contact Email
+                }).json()
+
+        # Grab Translated Text from Nested JSON Response
+        final_translation = translated_msg['matches'][0]['translation']
+
+        # Respond with Translation to Non-English Message
+        context.bot.send_message(
+            chat_id=update.effective_message.chat.id,
+            text=messages.msg_translate.format(final_translation),
+            parse_mode='HTML')
+
+    except Exception as e:
+        context.bot.send_message(
+            chat_id=update.effective_message.chat.id,
+            text=messages.msg_translate_failed,
+            parse_mode='HTML')
+
+        LOGGER.info(f'Translation Failed - {str(e)}')
+
+
 def main():
     # Start the bot
     updater = Updater(str(TOKEN))
@@ -510,6 +576,9 @@ def main():
 
     # Fetch Crypto Stats
     dp.add_handler(CommandHandler('price', price, run_async=True))
+
+    # Manual Translation Requests
+    dp.add_handler(CommandHandler('translate', translate_request, run_async=True))
 
     # Delete Unknown Command Messages from Group Members
     dp.add_handler(MessageHandler(Filters.command, unknown_command, run_async=True))
