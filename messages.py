@@ -1,7 +1,7 @@
 from emoji import emojize
 
 msg_start = emojize(
-    'Hi! My name is <b>LocalCoinBot</b>\n\nI\'m here to help moderate the chat group and handle promotional competitions. I\'m not always perfect just because I\'m a robot, so if I do something weird then don\'t be afraid to let my bosses know :smiley:\n\nThere\'s a bunch of cool things I can already do:\n/start - Show this message\n/admins - Show the group admins\n/communities - Official communities\n/support - Find Help or support\n/socials - Find us on social media\n/contract - LCS token smart contract\n/gas - Ethereum Gas Estimates\n/exchanges - Places to trade LCS\n/price - Show crypto market stats e.g. bitcoin usd',
+    'Hi! My name is <b>LocalCoinBot</b>\n\nI\'m here to help moderate the chat group and handle promotional competitions. I\'m not always perfect just because I\'m a robot, so if I do something weird then don\'t be afraid to let my bosses know :smiley:\n\nThere\'s a bunch of cool things I can already do:\n/start - Show this message\n/admins - Show the group admins\n/communities - Official communities\n/support - Find Help or support\n/socials - Find us on social media\n/contract - LCS token smart contract\n/gas - Ethereum Gas Estimates\n/exchanges - Places to trade LCS\n/price - Show crypto market stats e.g. bitcoin usd\n/translate - used to translate messages, accepts country code as argument',
     use_aliases=True)
 
 msg_admins = emojize(

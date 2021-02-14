@@ -466,6 +466,7 @@ def translate(context, update):
 
 
 def translate_request(update, context):
+    remove_command(context, update)
 
     # Make Sure it's a Public Chat
     if is_public_chat(update, context) is False:
@@ -584,7 +585,7 @@ def main():
     dp.add_handler(MessageHandler(Filters.command, unknown_command, run_async=True))
 
     # Translate Non-English Messages
-    dp.add_handler(MessageHandler(Filters.text & Filters.chat_type.supergroup & ~Filters.command, translate))
+    dp.add_handler(MessageHandler(Filters.text & Filters.chat_type.supergroup & ~Filters.command, translate, run_async=True))
 
     # Start the bot and run until a kill signal arrives
     updater.start_polling()
