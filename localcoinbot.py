@@ -68,6 +68,7 @@ def start(update, context):
                 'chat_id': chat_id
             }
             x = requests.post(EXCHANGE_URL, data=params)
+            LOGGER.info(f'Subscription response {x.status_code} {x.text}')
             if x.status_code == 200:
                 message = messages.msg_subscribe.format(username, chat_id)
                 context.message.reply_text(message, parse_mode=ParseMode.HTML)
