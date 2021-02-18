@@ -15,9 +15,11 @@ import config
 from settings import TOKEN
 from settings import MYMEMORY_KEY
 from settings import MYMEMORY_CONTACT
+from settings import EXCHANGE_URL
+
 from config import PARAMS
 from config import LOGGER
-from config import EXCHANGE_URL
+
 
 GREET_EVERY = 1
 WELCOME_COUNTER = 1
@@ -56,25 +58,26 @@ def start(update, context):
 
         cleaner(context, bot_hello)
     else:
-            username = update.message.from_user.first_name
-            chat_id = update.effective_message.chat.id
-            try:
-                telegram_unique_token = update.message.text.split('/start ')[1]
-                params = {
-                    'telegram_unique_token': telegram_unique_token,
-                    'chat_id': chat_id
-                }
-                x = requests.post(EXCHANGE_URL, data=params)
-                if x.status_code == 200:
-                    message = messages.msg_subscribe.format(username, chat_id)
-                    context.message.reply_text(message, parse_mode=ParseMode.HTML)
-                else:
-                    message = messages.msg_subscribe_error
-                    context.bot.send_message(chat_id, message, parse_mode=ParseMode.HTML)
-            except Exception as e:
-                message = messages.msg_default_start.format(username)
+        username = update.message.from_user.first_name
+        chat_id = update.effective_message.chat.id
+        try:
+            LOGGER.info(f'Subscription token message {update.message.text}')
+            telegram_unique_token = update.message.text.split('/start ')[1]
+            params = {
+                'telegram_unique_token': telegram_unique_token,
+                'chat_id': chat_id
+            }
+            x = requests.post(EXCHANGE_URL, data=params)
+            if x.status_code == 200:
+                message = messages.msg_subscribe.format(username, chat_id)
+                context.message.reply_text(message, parse_mode=ParseMode.HTML)
+            else:
+                message = messages.msg_subscribe_error
                 context.bot.send_message(chat_id, message, parse_mode=ParseMode.HTML)
-                LOGGER.warning(f'Exception Occured: {str(e)}')
+        except Exception as e:
+            message = messages.msg_default_start.format(username)
+            context.bot.send_message(chat_id, message, parse_mode=ParseMode.HTML)
+            LOGGER.warning(f'<start> Exception Occured: {str(e)}')
 
 
 def subscribe(update, context):
@@ -96,7 +99,7 @@ def subscribe(update, context):
     except Exception as e:
         message = messages.msg_default_start.format(username)
         context.message.reply_text(message, parse_mode=ParseMode.HTML)
-        LOGGER.warning(f'Exception Occured: {str(e)}')
+        LOGGER.warning(f'<subscribe> Exception Occured: {str(e)}')
 
 
 def error(update, context):
@@ -126,7 +129,7 @@ def delete_bot_message(update, context):
             message_id=update.effective_message.message_id
         )
     except BaseException as e:
-        LOGGER.warning(f'Exception Occured: {str(e)}')
+        LOGGER.warning(f'<delete_bot_message> Exception Occured: {str(e)}')
         pass
 
 

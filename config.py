@@ -1,5 +1,4 @@
 import logging
-from settings import EXCHANGE_URL
 
 PARAMS = {
         'symbol': 'LCS'
