@@ -71,7 +71,7 @@ def start(update, context):
             LOGGER.info(f'Subscription response {x.status_code} {x.text}')
             if x.status_code == 200:
                 message = messages.msg_subscribe.format(username, chat_id)
-                context.message.reply_text(message, parse_mode=ParseMode.HTML)
+                context.bot.send_message(chat_id, message, parse_mode=ParseMode.HTML)
             else:
                 message = messages.msg_subscribe_error
                 context.bot.send_message(chat_id, message, parse_mode=ParseMode.HTML)
