@@ -12,6 +12,7 @@ Setup:
   TOKEN = 'token', where 'token' is the bot authentication token
   MYMEMORY_KEY = 'key', where 'key' is an API key from https://mymemory.translated.net/
   MYMEMORY_CONTACT = 'email@domain.com' emergency contact email - increases translation allowance to 10K words per day
+  EXCHANGE_URL = 'https://localcoinswap.com'
 
 Testing locally:
 1. Open virtualenv and then start the bot:
