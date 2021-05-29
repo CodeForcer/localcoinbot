@@ -550,22 +550,6 @@ def common_requests(update, context):
         if any(indication in msg_text for indication in indicators):
             if any((crypto_match := crypto) in msg_text for crypto in cryptos):
                 
-                # Determine Primary Action
-                if action_match == "buy" or action_match == "sell":
-                    url_type = action_match
-                
-                elif action_match == "swap":
-                    swap_url = "https://localcoinswap.com/swap/new-swap"
-                    context.bot.send_message(
-                    chat_id=update.effective_message.chat.id,
-                    text=f"Hey {from_user}, are you trying to {action_match} {crypto_match.capitalize()}? Try this link while logged in: {swap_url}",
-                    parse_mode='HTML',
-                    disable_web_page_preview=True)
-                    return
-                
-                else:
-                    url_type = "buy-sell"
-                
                 # Prep Crypto Mention for URL
                 if crypto_match == "bitcoin":
                     url_crypto = "BTC"
@@ -591,6 +575,23 @@ def common_requests(update, context):
                     
                 else:
                     url_crypto = crypto_match.upper()
+                
+                # Determine Primary Action
+                if action_match == "buy" or action_match == "sell":
+                    url_type = action_match
+                
+                elif action_match == "swap":
+                    swap_url = "https://localcoinswap.com/swap"
+                    context.bot.send_message(
+                    chat_id=update.effective_message.chat.id,
+                    text=f"👋 Hey {from_user}!\n🤔 Are you trying to {action_match} {url_crypto}?\n"\
+                        f"\n<a href=\"{swap_url}\">Click here & start swapping {url_crypto}!</a> ",
+                    parse_mode='HTML',
+                    disable_web_page_preview=True)
+                    return
+                
+                else:
+                    url_type = "buy-sell"
                 
                 built_url = f"https://localcoinswap.com/{url_type}/{url_crypto}"
                 
