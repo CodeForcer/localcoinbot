@@ -582,12 +582,11 @@ def common_requests(update, context):
                 
                 elif action_match == "swap":
                     swap_url = "https://localcoinswap.com/swap"
-                    context.bot.send_message(
-                    chat_id=update.effective_message.chat.id,
-                    text=f"👋 Hey {from_user}!\n🤔 Are you trying to {action_match} {url_crypto}?\n"\
-                        f"\n<a href=\"{swap_url}\">Click here & start swapping {url_crypto}!</a> ",
-                    parse_mode='HTML',
-                    disable_web_page_preview=True)
+                    update.effective_message.reply_text(
+                        text=f"👋 Hey {from_user}!\n🤔 Are you trying to {action_match} {url_crypto}?\n"\
+                            f"\n<a href=\"{swap_url}\">Click here & start swapping {url_crypto}!</a> ",
+                        parse_mode='HTML',
+                        disable_web_page_preview=True)
                     return
                 
                 else:
