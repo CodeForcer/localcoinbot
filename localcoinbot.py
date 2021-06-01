@@ -20,12 +20,15 @@ from settings import EXCHANGE_URL
 from config import PARAMS
 from config import LOGGER
 
+from questions import indicators, cryptos, actions
+
 
 GREET_EVERY = 1
 WELCOME_COUNTER = 1
+AUTO_TRANSLATE = False
 
 # How Agressive is the Cleaner (Seconds)
-PATIENCE = 60
+PATIENCE = 90
 
 # Coingecko API Wrapper
 cg = CoinGeckoAPI()
@@ -412,7 +415,7 @@ def price(update, context):
                 price_msg = context.bot.sendMessage(
                 chat_id=update.effective_message.chat.id,
                 text=messages.msg_stats_fail,
-                parse_mode='HTML',
+                parse_mode='HTML'
                 )
 
     cleaner(context, price_msg)
@@ -440,33 +443,36 @@ def unknown_command(context, update):
 
 
 def translate(context, update):
-    # Checks if Language is English, if Confident it isn't Translate & Reply
-    msg_text = context.effective_message.text
-    lang, confidence = identifier.classify(msg_text)
+    if AUTO_TRANSLATE is True:
+        # Checks if Language is English, if Confident it isn't Translate & Reply
+        msg_text = context.effective_message.text
+        lang, confidence = identifier.classify(msg_text)
 
-    if lang != "en" and confidence >= 0.9:
-        try:
-            # Create Langpair to Show Translation API What We Need
-            langpair = lang + '|en'
+        if lang != "en" and confidence >= 0.9:
+            try:
+                # Create Langpair to Show Translation API What We Need
+                langpair = lang + '|en'
 
-            translated_msg = requests.get(
-                'https://api.mymemory.translated.net/get',
-                params={
-                    'q': msg_text,
-                    'key': MYMEMORY_KEY, # API Key
-                    'langpair': langpair,
-                    'de': MYMEMORY_CONTACT # Contact Email
-                    }).json()
+                translated_msg = requests.get(
+                    'https://api.mymemory.translated.net/get',
+                    params={
+                        'q': msg_text,
+                        'key': MYMEMORY_KEY, # API Key
+                        'langpair': langpair,
+                        'de': MYMEMORY_CONTACT # Contact Email
+                        }).json()
 
-            # Grab Translated Text from Nested JSON Response
-            final_translation = translated_msg['matches'][0]['translation']
+                # Grab Translated Text from Nested JSON Response
+                final_translation = translated_msg['matches'][0]['translation']
 
-            # Respond with Translation to Non-English Message
-            context.effective_message.reply_text(
-                messages.msg_translate.format(final_translation),
-                parse_mode='HTML')
-        except Exception as e:
-            LOGGER.warning(f'Translation Failed - {str(e)}')
+                # Respond with Translation to Non-English Message
+                context.effective_message.reply_text(
+                    messages.msg_translate.format(final_translation),
+                    parse_mode='HTML')
+            except Exception as e:
+                LOGGER.warning(f'Translation Failed - {str(e)}')
+        else:
+            return
 
 
 def translate_request(update, context):
@@ -536,6 +542,65 @@ def translate_request(update, context):
         LOGGER.info(f'Translation Failed - {str(e)}')
 
 
+def common_requests(update, context):
+    msg_text = update.effective_message.text.lower()
+    from_user = update.effective_user.username
+
+    if any((action_match := action) in msg_text for action in actions):
+        if any(indication in msg_text for indication in indicators):
+            if any((crypto_match := crypto) in msg_text for crypto in cryptos):
+                
+                # Prep Crypto Mention for URL
+                if crypto_match == "bitcoin":
+                    url_crypto = "BTC"
+                    
+                elif crypto_match == "ethereum":
+                    url_crypto = "ETH"
+                
+                elif crypto_match == "polkadot":
+                    url_crypto = "DOT"
+                    
+                elif crypto_match == "kusama":
+                    url_crypto = "KSM"
+                    
+                elif crypto_match == "tether":
+                    url_crypto = "USDT"
+                
+                elif crypto_match == "usd coin":
+                    url_crypto = "USDC"
+                
+                # Using just LCS would likely result in Excessive Triggers
+                elif crypto_match == "lcs tokens" or crypto_match == "lcs cryptoshares":
+                    url_crypto = "LCS"
+                    
+                else:
+                    url_crypto = crypto_match.upper()
+                
+                # Determine Primary Action
+                if action_match == "buy" or action_match == "sell":
+                    url_type = action_match
+                
+                elif action_match == "swap":
+                    swap_url = "https://localcoinswap.com/swap"
+                    update.effective_message.reply_text(
+                        text=f"👋 Hey {from_user}!\n🤔 Are you trying to {action_match} {url_crypto}?\n"\
+                            f"\n<a href=\"{swap_url}\">Click here & start swapping {url_crypto}!</a> ",
+                        parse_mode='HTML',
+                        disable_web_page_preview=True)
+                    return
+                
+                else:
+                    url_type = "buy-sell"
+                
+                built_url = f"https://localcoinswap.com/{url_type}/{url_crypto}"
+                
+                update.effective_message.reply_text(
+                    text=f"👋 Hey {from_user}!\n🤔 Are you trying to {action_match} {url_crypto}?\n"\
+                        f"\n<a href=\"{built_url}\">Click here & start browsing {url_crypto} offers!</a> ",
+                    parse_mode='HTML',
+                    disable_web_page_preview=True)
+
+
 def main():
     # Start the bot
     updater = Updater(str(TOKEN))
@@ -588,6 +653,9 @@ def main():
     # Delete Unknown Command Messages from Group Members
     dp.add_handler(MessageHandler(Filters.command, unknown_command, run_async=True))
 
+    # Looks for Requests
+    dp.add_handler(MessageHandler(Filters.text & Filters.chat_type.supergroup & ~Filters.command, common_requests, run_async=True))
+    
     # Translate Non-English Messages
     dp.add_handler(MessageHandler(Filters.text & Filters.chat_type.supergroup & ~Filters.command, translate, run_async=True))
 
